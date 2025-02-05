@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a New Sport</title>
+    <style>
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 350px;
+}
+
+h1 {
+  color: #d63384;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+input[type="text"]:focus {
+  border-color: #d63384;
+  outline: none;
+  box-shadow: 0 0 8px rgba(214, 51, 132, 0.5);
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #d63384;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #b0276f;
+}
+
+a {
+  display: block;
+  margin-top: 15px;
+  color: #d63384;
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+a:hover {
+  color: #b0276f;
+}
+
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Create a New Sport</h1>
+        <form action="/create-sport" method="POST">
+            <input type="text" name="sportName" placeholder="Enter Sport Name" required>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button type="submit">Create Sport</button>
+        </form>
+        <a href="/admindashboard">← Back to Dashboard</a>
+    </div>
+
+</body>
+</html>

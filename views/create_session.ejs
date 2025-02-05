@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create a New Sports Session</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+body {
+  font-family: 'Arial', sans-serif;
+  background: url('https://i.pinimg.com/originals/91/dd/ec/91ddec9c4e86cf4f2c9c86a43af750b1.jpg') no-repeat center center fixed;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 500px;
+}
+
+h1 {
+  color: #1a237e;
+  font-size: 26px;
+  margin-bottom: 25px;
+}
+
+.alert {
+    padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.alert-danger {
+  background: #e57373;
+  color: white;
+}
+
+.alert-success {
+  background: #81c784;
+  color: white;
+}
+
+.form-label {
+  display: block;
+  text-align: left;
+  font-weight: bold;
+  margin-top: 10px;
+  font-size: 18px;
+  color: #333;
+}
+
+.form-control,
+.form-select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #1a237e;
+  outline: none;
+  box-shadow: 0 0 12px rgba(26, 35, 126, 0.4);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.col-md-6 {
+  width: 48%;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: #1a237e;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 20px;
+}
+
+.btn-primary:hover {
+  background: #283593;
+}
+
+.back-link {
+  display: block;
+  margin-top: 20px;
+  color: #1a237e;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.back-link:hover {
+  color: #283593;
+  text-decoration: underline;
+}
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Create a New Sports Session</h1>
+
+    <% if (messages.error) { %>
+        <div class="alert alert-danger"><%= messages.error %></div>
+    <% } %>
+    <% if (messages.success) { %>
+        <div class="alert alert-success"><%= messages.success %></div>
+    <% } %>
+
+    <form action="/create-session" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        
+        <div class="form-group">
+            <label for="sportId" class="form-label">Select Sport:</label>
+            <select class="form-select" id="sportId" name="sportId" required>
+                <option value="">-- Select Sport --</option>
+                <% sports.forEach(sport => { %>
+                    <option value="<%= sport.id %>"><%= sport.name %></option>
+                <% }) %>
+            </select>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label for="dateTime" class="form-label">Date & Time:</label>
+                <input type="datetime-local" class="form-control" id="dateTime" name="dateTime" required>
+            </div>
+            <div class="col-md-6 form-group">
+                <label for="venue" class="form-label">Venue:</label>
+                <input type="text" class="form-control" id="venue" name="venue" required>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label for="team1Players" class="form-label">Team 1 Players (ID's)</label>
+                <input type="text" class="form-control" id="team1Players" name="team1Players" placeholder="Comma-separated IDs">
+            </div>
+            <div class="col-md-6 form-group">
+                <label for="team2Players" class="form-label">Team 2 Players (ID's)</label>
+                <input type="text" class="form-control" id="team2Players" name="team2Players" placeholder="Comma-separated IDs">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="additionalPlayers" class="form-label">Additional Players:</label>
+            <input type="number" class="form-control" id="additionalPlayers" name="additionalPlayers" min="0">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Session</button>
+    </form>
+
+    <a href="<%= user === 'admin' ? '/admindashboard' : '/playerdashboard' %>" class="back-link">Back to Dashboard</a>
+</div>
+
+</body>
+</html>

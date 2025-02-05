@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Scheduler</title>
+    <style>
+body {
+  font-family: 'Arial', sans-serif;
+  background: url('https://i.pinimg.com/originals/91/dd/ec/91ddec9c4e86cf4f2c9c86a43af750b1.jpg') no-repeat center center fixed;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #fff;
+}
+p{
+    color:#4caf50;
+}
+.container {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 80%;
+  max-width: 800px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid #1e3c72;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  color: #1e3c72;
+  font-size: 28px;
+}
+
+.logout {
+  background: #ff4b5c;
+  color: white;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.logout:hover {
+  background: #d63447;
+}
+
+.flash-message {
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.success {
+  background: #4caf50;
+  color: white;
+}
+
+.error {
+  background: #e74c3c;
+  color: white;
+}
+
+.dashboard {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.card {
+  background: #f4f4f4;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+  width: 48%;
+}
+
+.card h2 {
+  color: #1e3c72;
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+.sports-list {
+  list-style: none;
+  padding: 0;
+}
+
+.sports-list li {
+  background: #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  font-size: 18px;
+}
+
+.session-box {
+  background: #e3f2fd;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+}
+
+.session-box strong {
+  font-size: 18px;
+  color: #1e3c72;
+}
+
+.join-btn, .cancel-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+.join-btn {
+  background: #1e3c72;
+  color: white;
+}
+
+.join-btn:hover {
+  background: #2a5298;
+}
+
+.cancel-btn {
+  background: #ff4b5c;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background: #d63447;
+}
+
+.joined-sessions-container {
+  margin-top: 30px;
+}
+
+.joined-sessions-container h2 {
+  color: #1e3c72;
+}
+
+.create-session {
+  margin-top: 20px;
+}
+
+.create-session a {
+  display: inline-block;
+  background: #4caf50;
+  color: white;
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+.create-session a:hover {
+  background: #388e3c;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Welcome, <%= user.firstName %>!</h1>
+            <a href="/logout" class="logout">Logout</a>
+        </header>
+
+        <% if (successMessage.length > 0) { %>
+            <div class="flash-message success">
+                <%= successMessage %>
+            </div>
+        <% } %>
+      
+        <% if (errorMessage.length > 0) { %>
+            <div class="flash-message error">
+                <%= errorMessage %>
+            </div>
+        <% } %>
+
+        <div class="dashboard">
+            <div class="card">
+                <h2>Available Sports</h2>
+                <ul class="sports-list">
+                    <% sports.forEach(sport => { %>
+                        <li><%= sport.name %></li>
+                    <% }) %>
+                </ul>
+            </div>
+            <div class="card">
+                <h2>Available Sessions</h2>
+                <% if (availableSessions.length > 0) { %>
+                    <% availableSessions.forEach(session => { %>
+                        <div class="session-box">
+                            <strong><%= session.sport.name %></strong> - <%= session.dateTime %> at <%= session.venue %>
+                            <form action="/join-session/<%= session.id %>" method="POST">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                <button type="submit" class="join-btn">Join</button>
+                            </form>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p>No sessions available.</p>
+                <% } %>
+            </div>
+        </div>
+        <div class="joined-sessions-container">
+            <h2>My Joined Sessions</h2>
+            <% if (joinedSessions.length > 0) { %>
+                <% joinedSessions.forEach(session => { %>
+                    <div class="session-box">
+                        <strong><%= session.sport.name %></strong> - <%= session.dateTime %> at <%= session.venue %>
+                        <form action="/cancel-session/<%= session.id %>" method="POST">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <input type="text" name="reason" placeholder="Reason for cancellation" required>
+                            <button type="submit" class="cancel-btn">Cancel</button>
+                        </form>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p>No joined sessions.</p>
+            <% } %>
+
+            <div class="create-session">
+                <a href="/create-session">Create a New Session</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

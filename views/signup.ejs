@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+  <style>
+ body {
+  font-family: Arial, sans-serif;
+  background: url('https://i.pinimg.com/originals/91/dd/ec/91ddec9c4e86cf4f2c9c86a43af750b1.jpg') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.signup-container {
+  margin-top: 100px;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 350px;
+}
+
+.signup-container h1 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.signup-container input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.signup-container input:focus {
+  border-color: #6e8efb;
+  outline: none;
+  box-shadow: 0 0 8px rgba(110, 142, 251, 0.5);
+}
+
+.signup-container button {
+  display: block;
+  margin-top: 15px;
+  color: black;
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.3s;
+  border: 2px solid black; /* Adds a border */
+  padding: 8px 12px; /* Adds space inside the box */
+  border-radius: 5px; /* Rounds the corners */
+  text-align: center; /* Centers the text */
+  width: fit-content; /* Adjusts box width to content */
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: bold;
+  cursor: pointer;
+
+}
+
+.signup-container button:hover {
+  background: lightgray;
+}
+
+.signup-container a {
+  display: block;
+  margin-top: 15px;
+  color: black;
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.3s;
+  border: 2px solid black; /* Adds a border */
+  padding: 8px 12px; /* Adds space inside the box */
+  border-radius: 5px; /* Rounds the corners */
+  text-align: center; /* Centers the text */
+  width: fit-content; /* Adjusts box width to content */
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: bold;
+}
+
+
+.signup-container a:hover {
+  color:whitesmoke;
+}
+
+  </style>
+</head>
+<body>
+  <div class="signup-container">
+    <h1>Create a New Account</h1>
+    <form action="/create-player" method="POST">
+      <input type="text" name="firstName" placeholder="First Name" required>
+      <input type="text" name="lastName" placeholder="Last Name" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="password" name="password" placeholder="Password" required>
+      <input type="text" name="role" placeholder="Role (admin/player)" required>
+      <button type="submit">Sign Up</button>
+      <a href="/logout">Go back</a>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    </form>
+  </div>
+</body>
+</html>

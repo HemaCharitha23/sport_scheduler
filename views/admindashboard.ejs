@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+body {
+  font-family: 'Arial', sans-serif;
+  background: url('https://i.pinimg.com/originals/91/dd/ec/91ddec9c4e86cf4f2c9c86a43af750b1.jpg') no-repeat center center fixed;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  background: #FEF29B;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  width: 500px;
+  text-align: center;
+}
+
+h1 {
+  color: #511f52;
+  font-size: 26px;
+  margin-bottom: 15px;
+}
+
+.success-message {
+  background: #4CAF50;
+  color: white;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+}
+
+.error-message {
+  background: #E74C3C;
+  color: white;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+}
+
+.section {
+  background: #f4f4f4;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  color: #333;
+  font-size: 20px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: white;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 6px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+form {
+  margin-top: 10px;
+}
+
+input[type="text"] {
+  width: 80%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+button {
+  background: #511f52;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin-top: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #742c76;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+button[style*="background: darkred"] {
+  background: darkred;
+}
+
+button[style*="background: darkred"]:hover {
+  background: red;
+}
+
+.action-buttons {
+  margin-top: 20px;
+}
+
+.action-buttons a {
+  text-decoration: none;
+}
+
+.action-buttons button {
+  width: 100%;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, <%= user.firstName %></h1>
+
+        <% if (successMessage.length > 0) { %>
+            <div class="success-message"><%= successMessage %></div>
+        <% } %>
+
+        <% if (errorMessage.length > 0) { %>
+            <div class="error-message"><%= errorMessage %></div>
+        <% } %>
+
+        <!-- Sports Section -->
+        <div class="section">
+            <h2>Your Created Sports</h2>
+            <% if (sports.length > 0) { %>
+                <ul>
+                    <% sports.forEach(sport => { %>
+                        <li><%= sport.name %></li>
+                    <% }) %>
+                </ul>
+            <% } else { %>
+                <p>No sports created yet.</p>
+            <% } %>
+            <a href="/create-sport"><button>Create New Sport</button></a>
+        </div>
+
+        <!-- My Joined Sessions -->
+        <div class="section">
+            <h2>My Joined Sessions</h2>
+            <% if (joinedSessions.length > 0) { %>
+                <% joinedSessions.forEach(session => { %>
+                    <div class="session">
+                        <strong><%= session.sport.name %></strong> - <%= session.dateTime %> at <%= session.venue %>
+                        <form action="/cancel-session/<%= session.id %>" method="POST">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <input type="text" name="reason" placeholder="Reason for cancellation" required>
+                            <button type="submit" style="background: #511f52;">Cancel</button>
+                        </form>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p>No joined sessions.</p>
+            <% } %>
+        </div>
+
+        <!-- Available Sessions Section -->
+        <div class="section">
+            <h2>Available Sessions</h2>
+            <% if (sessions.length > 0) { %>
+                <ul>
+                    <% sessions.forEach(session => { %>
+                        <li>
+                            <strong><%= session.sport.name %></strong> - 
+                            <%= session.dateTime %> at <%= session.venue %>
+                            <br>
+                            <div class="form-actions">
+                                <form action="/delete-session/<%= session.id %>" method="POST">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <button type="submit" style="background:#511f52;">Delete</button>
+                                </form>
+                                <form action="/join-session/<%= session.id %>" method="POST">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <button type="submit" style="background: #511f52;">Join</button>
+                                </form>
+                            </div>
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } else { %>
+                <p>No sessions created yet.</p>
+            <% } %>
+        </div>
+
+        <!-- Create Session & Logout -->
+        <div class="action-buttons">
+            <a href="/create-session"><button>Create a New Session</button></a>
+            <br><br>
+            <a href="/logout"><button style="background: darkred;">Logout</button></a>
+        </div>
+    </div>
+</body>
+</html>
